@@ -1,6 +1,6 @@
 {
   "homepage": "https://dattaAwchar.github.io/Rick-Morty_Top-Characters",
-  "name": "Rick And Morty",
+  "name": "rick-morty",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
