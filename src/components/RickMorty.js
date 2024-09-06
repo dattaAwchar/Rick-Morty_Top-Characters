@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RickMortyItems from './RickMortyItems';
+import LoadingBar from 'react-top-loading-bar'; 
 
 export default class RickMorty extends Component {
   constructor() {
@@ -10,11 +11,14 @@ export default class RickMorty extends Component {
       loading: false,
       currentPage: 1,
       itemsPerPage: 15,
+      progress: 0 
     };
+    this.loadingBar = React.createRef(); 
   }
 
   async componentDidMount() {
     this.setState({ loading: true });
+    this.loadingBar.current.continuousStart(); 
     try {
       // Fetch all pages
       let allResults = [];
@@ -31,9 +35,11 @@ export default class RickMorty extends Component {
         currentPage: 1,
         loading: false
       });
+      this.loadingBar.current.complete();
     } catch (error) {
       console.error('Error fetching data:', error);
       this.setState({ loading: false });
+      this.loadingBar.current.complete(); 
     }
   }
 
@@ -46,23 +52,27 @@ export default class RickMorty extends Component {
 
   handlePrevClick = () => {
     if (this.state.currentPage > 1) {
+      this.loadingBar.current.continuousStart(); 
       const newPage = this.state.currentPage - 1;
       this.setState({
         displayedResults: this.getItemsForPage(newPage, this.state.results),
         currentPage: newPage
       });
-      window.scrollTo(0, 0); // Scroll to the top of the page
+      window.scrollTo(0, 0); 
+      this.loadingBar.current.complete(); 
     }
   };
 
   handleNextClick = () => {
     if (this.state.currentPage < this.state.totalPages) {
+      this.loadingBar.current.continuousStart(); 
       const newPage = this.state.currentPage + 1;
       this.setState({
         displayedResults: this.getItemsForPage(newPage, this.state.results),
         currentPage: newPage
       });
-      window.scrollTo(0, 0); // Scroll to the top of the page
+      window.scrollTo(0, 0);
+      this.loadingBar.current.complete(); 
     }
   };
 
@@ -71,6 +81,7 @@ export default class RickMorty extends Component {
 
     return (
       <>
+        <LoadingBar color='yellow' ref={this.loadingBar} /> 
         <div className="container my-5 mt-5 pt-5">
           {loading && <p className="text-center">Loading...</p>}
           <div className='row'>

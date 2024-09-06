@@ -4,6 +4,9 @@ import Navbar from './components/Navbar'
 import RickMorty from './components/RickMorty'
 
 export default class App extends Component {
+
+
+
   render() {
     return (
       <>
